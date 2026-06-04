@@ -1,5 +1,6 @@
 package fr.univ_amu.iut.exercice1;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -31,15 +32,12 @@ public class MessageViewModel {
   public MessageViewModel(Message message) {
     this.message = message;
 
-    // TODO exercice 1 : câbler le ViewModel.
-    //
-    // 1. Initialiser la propriété `texte` avec la valeur actuelle du modèle
-    //    (message.getTexte()).
-    // 2. Quand `texte` change, recopier la nouvelle valeur dans le modèle
-    //    (message.setTexte(...)) : c'est ce qui garde le modèle à jour.
-    // 3. Lier `apercu` (lecture seule pour la vue) à une version dérivée de
-    //    `texte` : le texte saisi précédé de la mention "Aperçu : ".
-    //    Astuce : Bindings.concat("Aperçu : ", texte).
+    texte.setValue(message.getTexte());
+    texte.addListener(
+        (obs, oldB, newV) -> {
+          message.setTexte(newV);
+        });
+    apercu.bind(Bindings.concat("Aperçu : ", texte));
   }
 
   public StringProperty texteProperty() {
